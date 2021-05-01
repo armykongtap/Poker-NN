@@ -1,15 +1,5 @@
 import pandas as pd
-
-name_dict = {
-    "LnwBank": "Bank",
-    "น้องจอย": "Joice",
-    "Owen": "Owen",
-    "มิวV1.560": "Miw",
-    "Keng": "Keng",
-    "Arm": "Arm",
-    "เชน_แปป": "Chain",
-    "Gear": "Gear",
-}
+from name_dict import NAME_DICT
 
 BB_SIZE = 4
 
@@ -37,10 +27,10 @@ df["is_preflop"] = df["is_preflop"].fillna(method="pad").fillna(False)
 #%%
 # Player name
 df["player_name"] = df["entry"].str.extract(r"\"(\S+) @ \S+\"", expand=False)
-df["player_name"] = df["player_name"].replace(name_dict)
+df["player_name"] = df["player_name"].replace(NAME_DICT)
 
 assert set(df["player_name"].dropna()).issubset(
-    set(name_dict.values())
+    set(NAME_DICT.values())
 ), "Please add more name dict"
 
 #%%
@@ -67,7 +57,7 @@ stack = stack.loc[stack["is_stack"], "entry"]
 stack = stack.str.extractall(r"\"(?P<player_name>\S+) @ \S+\" \((?P<stack>\d+)\)")
 
 stack["stack"] = pd.to_numeric(stack["stack"])
-stack["player_name"] = stack["player_name"].replace(name_dict)
+stack["player_name"] = stack["player_name"].replace(NAME_DICT)
 
 stack = stack.reset_index("round_no")
 stack = stack.reset_index(drop=True)
